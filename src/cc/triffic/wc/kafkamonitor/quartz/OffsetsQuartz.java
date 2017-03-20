@@ -70,9 +70,41 @@ public class OffsetsQuartz {
 				}
 			}
 			DBZKDataUtils.insert(list);
-			boolean alarmEnable = SystemConfigUtils.getBooleanProperty("anotherkafkamonitor.mail.enable");
-			if (alarmEnable) {
-				List<AlarmDomain> listAlarm = alarmConfigure();
+			
+			// send alarm sms
+			boolean alarmSmsEnable = SystemConfigUtils.getBooleanProperty("anotherkafkamonitor.mobile.enable");
+			if (alarmSmsEnable) {
+				List<AlarmDomain> listAlarm = alarmConfigure("email");
+				Iterator<AlarmDomain> iter = listAlarm.iterator();
+				while (iter.hasNext()) {
+					alarm = (AlarmDomain) iter.next();
+					for (OffsetsSQLiteDomain offset : list)
+						if ((offset.getGroup().equals(alarm.getGroup()))
+								&& (offset.getTopic().equals(alarm.getTopics()))
+								&& (offset.getLag() > alarm.getLag()))
+							try {
+								SendMessageUtils.send(
+										alarm.getOwners(),
+										"Kafka监控平台Alarm Notice",
+										"Lag exceeds a specified threshold,Topic is ["
+												+ alarm.getTopics()
+												+ "],current lag is ["
+												+ offset.getLag()
+												+ "],expired lag is ["
+												+ alarm.getLag() + "].");
+							} catch (Exception ex) {
+								LOG.error("Topic[" + alarm.getTopics()
+										+ "] Send alarm mail has error,msg is "
+										+ ex.getMessage());
+							}
+				}
+			}
+			
+			
+			// send alarm email
+			boolean alarmEmailEnable = SystemConfigUtils.getBooleanProperty("anotherkafkamonitor.mail.enable");
+			if (alarmEmailEnable) {
+				List<AlarmDomain> listAlarm = alarmConfigure("email");
 				Iterator<AlarmDomain> iter = listAlarm.iterator();
 				while (iter.hasNext()) {
 					alarm = (AlarmDomain) iter.next();
@@ -132,8 +164,8 @@ public class OffsetsQuartz {
 		return list;
 	}
 
-	private static List<AlarmDomain> alarmConfigure() {
-		String ret = DBZKDataUtils.getAlarm();
+	private static List<AlarmDomain> alarmConfigure(String type) {
+		String ret = DBZKDataUtils.getAlarm(type);
 		List<AlarmDomain> list = new ArrayList<AlarmDomain>();
 		JSONArray array = JSON.parseArray(ret);
 		for (Iterator<?> localIterator = array.iterator(); localIterator.hasNext();) {

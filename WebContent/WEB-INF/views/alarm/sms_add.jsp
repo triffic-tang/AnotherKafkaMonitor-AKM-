@@ -25,7 +25,7 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<h1 class="page-header">
-						Alarm <small>add</small>
+						Alarm SMS <small>add</small>
 					</h1>
 				</div>
 				<!-- /.col-lg-12 -->
@@ -61,7 +61,7 @@
 												name="ke_group_alarms" type="hidden"> <label
 												for="inputError" class="control-label text-danger"><i
 												class="fa fa-info-circle"></i> Select the group you need to
-												alarm .</label>
+												alarm. </label>
 										</div>
 										<div class="form-group">
 											<label>Topic Name (*)</label> <input id="ke_topic_alarm"
@@ -70,7 +70,7 @@
 												name="ke_topic_alarms" type="hidden"> <label
 												for="inputError" class="control-label text-danger"><i
 												class="fa fa-info-circle"></i> Select the topic you need to
-												alarm .</label>
+												alarm. </label>
 										</div>
 										<div class="form-group">
 											<label>Lag Threshold (*)</label> <input id="ke_topic_lag"
@@ -78,16 +78,16 @@
 												value="1"> <label for="inputError"
 												class="control-label text-danger"><i
 												class="fa fa-info-circle"></i> Setting the blocking
-												threshold, Parameters must be numeric .</label>
+												threshold, Parameters must be numeric. </label>
 										</div>
 										<div class="form-group">
-											<label>Owner Email (*)</label> <input id="ke_topic_email"
-												name="ke_topic_email" class="form-control" maxlength=50
-												value="">
-												<label for="inputError"
-												class="control-label text-danger"><i
-												class="fa fa-info-circle"></i> To whom the alarm topic
-												information, Such as 'example@email.com' .</label>
+									   <!-- 短信 -->
+									    <label>Owner Mobile (*)</label> <input id="ke_topic_mobile"
+											name="ke_topic_mobile" class="form-control" maxlength=50
+											value="">
+											<label for="inputError"
+											class="control-label text-danger"><i
+											class="fa fa-info-circle"></i> The Mobile which receives alarm message，like '13545862153'. </label>
 										</div>
 										<button type="button" class="btn btn-success" onclick="contextFormValid();">Add</button>
 										<div id="alert_mssage" style="display: none"
@@ -95,6 +95,7 @@
 											<label>Oops! Please make some changes . (*) is
 												required .</label>
 										</div>
+										<input id="addType" name="addType" type="hidden" value="sms"/>
 									</form>
 								</div>
 							</div>
@@ -118,7 +119,8 @@
 	//验证提交表单内容
 	function contextFormValid() {
 		var ke_topic_lag = $("#ke_topic_lag").val();
-		var ke_topic_email = $("#ke_topic_email").val();
+		//短信号码 
+		var ke_topic_mobile = $("#ke_topic_mobile").val();
 		var ke_topic_alarms = JSON.stringify($('#ke_topic_alarm').magicSuggest().getSelection());
 		var ke_group_alarms = JSON.stringify($('#ke_group_alarm').magicSuggest().getSelection());
 
@@ -143,14 +145,17 @@
 			}, 3000);
 			return false;
 		}
-		var re = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
-		if (!re.test(ke_topic_email)) {
+	    
+	    //短信
+		var re=/^1[3|4|5|7|8][0-9]\d{8}$/;
+		if (!ke_topic_mobile.match(re)) {
 			$("#alert_mssage").show();
 			setTimeout(function() {
 				$("#alert_mssage").hide();
 			}, 3000);
 			return false;
 		}
+		
 		$('#ke_topic_alarms').val(ke_topic_alarms);
 		$('#ke_group_alarms').val(ke_group_alarms);
 		var form = document.getElementById("form");

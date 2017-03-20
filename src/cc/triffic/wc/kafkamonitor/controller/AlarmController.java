@@ -29,17 +29,31 @@ public class AlarmController
 {	
 	private static final Logger LOG = LoggerFactory.getLogger(AlarmController.class);
 
-	@RequestMapping(value = { "/alarm/add" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public ModelAndView addView(HttpSession session) {
+	@RequestMapping(value = { "/alarm/email_add" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
+	public ModelAndView addEmailView(HttpSession session) {
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("/alarm/add");
+		mav.setViewName("/alarm/email_add");
 		return mav;
 	}
 
-	@RequestMapping(value = { "/alarm/modify" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public ModelAndView indexView(HttpSession session) {
+	@RequestMapping(value = { "/alarm/email_list" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
+	public ModelAndView indexEmailView(HttpSession session) {
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("/alarm/modify");
+		mav.setViewName("/alarm/email_list");
+		return mav;
+	}
+	
+	@RequestMapping(value = { "/alarm/sms_add" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
+	public ModelAndView addSMSView(HttpSession session) {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("/alarm/sms_add");
+		return mav;
+	}
+
+	@RequestMapping(value = { "/alarm/sms_list" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
+	public ModelAndView indexSMSView(HttpSession session) {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("/alarm/sms_list");
 		return mav;
 	}
 
@@ -88,7 +102,13 @@ public class AlarmController
 		String ke_group_alarms = request.getParameter("ke_group_alarms");
 		String ke_topic_alarms = request.getParameter("ke_topic_alarms");
 		String ke_topic_lag = request.getParameter("ke_topic_lag");
-		String ke_topic_email = request.getParameter("ke_topic_email");
+		String addType = request.getParameter("addType");
+		String sendObject = "";
+		if("sms".equalsIgnoreCase(addType)) {
+			sendObject = request.getParameter("ke_topic_mobile");
+		}else {
+			sendObject = request.getParameter("ke_topic_email");
+		}
 		JSONArray topics = JSON.parseArray(ke_topic_alarms);
 		JSONArray groups = JSON.parseArray(ke_group_alarms);
 		AlarmDomain alarm = new AlarmDomain();
@@ -110,23 +130,28 @@ public class AlarmController
 					.append(ex.getMessage()).toString());
 		}
 		alarm.setModifyDate(CalendarUtils.getNormalDate());
-		alarm.setOwners(ke_topic_email);
+		alarm.setOwners(sendObject);
+		alarm.setType(addType);
 
 		Map<String, Object> map = AlarmService.addAlarm(alarm);
 		if ("success".equals(map.get("status"))) {
 			session.removeAttribute("Alarm_Submit_Status");
 			session.setAttribute("Alarm_Submit_Status", map.get("info"));
+			session.removeAttribute("view_detail_page");
+			session.setAttribute("view_detail_page", addType);
 			mav.setViewName("redirect:/alarm/create/success");
 		} else {
 			session.removeAttribute("Alarm_Submit_Status");
 			session.setAttribute("Alarm_Submit_Status", map.get("info"));
+			session.removeAttribute("view_detail_page");
+			session.setAttribute("view_detail_page", addType);
 			mav.setViewName("redirect:/alarm/create/failed");
 		}
 		return mav;
 	}
 
-	@RequestMapping(value = { "/alarm/list/table/ajax" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public void alarmTopicListAjax(HttpServletResponse response, HttpServletRequest request) {
+	@RequestMapping(value = { "/alarm/list/table/ajax/{type}" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
+	public void alarmTopicListAjax(HttpServletResponse response, HttpServletRequest request, @PathVariable("type") String type) {
 		response.setContentType("text/html;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		response.setHeader("Charset", "utf-8");
@@ -157,7 +182,7 @@ public class AlarmController
 			}
 		}
 
-		JSONArray ret = JSON.parseArray(AlarmService.list());
+		JSONArray ret = JSON.parseArray(AlarmService.list(type));
 		int offset = 0;
 		JSONArray retArr = new JSONArray();
 		for (Iterator<?> localIterator2 = ret.iterator(); localIterator2.hasNext();) {

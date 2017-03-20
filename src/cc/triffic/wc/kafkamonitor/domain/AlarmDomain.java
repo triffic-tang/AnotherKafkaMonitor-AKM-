@@ -8,6 +8,7 @@ public class AlarmDomain {
 	private long lag;
 	private String owners;
 	private String modifyDate;
+	private String type;
 
 	public AlarmDomain() {
 		this.group = "";
@@ -15,6 +16,7 @@ public class AlarmDomain {
 		this.lag = 0L;
 		this.owners = "";
 		this.modifyDate = "";
+		this.setType("");
 	}
 
 	public String getGroup() {
@@ -59,5 +61,13 @@ public class AlarmDomain {
 
 	public String toString() {
 		return new Gson().toJson(this);
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }

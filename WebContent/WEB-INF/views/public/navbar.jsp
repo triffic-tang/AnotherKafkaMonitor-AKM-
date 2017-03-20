@@ -37,28 +37,19 @@
 			
 			<li id="navbar_cli"><a href="/AnotherKafkaMonitor/cluster/info"><i
 							class="fa fa-sitemap fa-fw"></i> ClusterInfo</a></li>
-					
-			<!--  		
-			<li><a href="#" data-toggle="collapse" data-target="#demo2"><i
-					class="fa fa-fw fa-cloud"></i> Cluster Info <i
-					class="fa fa-fw fa-caret-down"></i></a>
-				<ul id="demo2" class="collapse">
-					<li id="navbar_cli"><a href="/AnotherKafkaMonitor/cluster/info"><i
-							class="fa fa-sitemap fa-fw"></i> ZK & Kafka</a></li>
-					<li id="navbar_zk"><a href="/AnotherKafkaMonitor/cluster/zkcli"><i
-							class="fa fa-terminal fa-fw"></i> ZkCli</a></li>
-				</ul>
-			</li>
-			-->	
 			
 			<li><a href="#" data-toggle="collapse" data-target="#demo1"><i
 					class="fa fa-fw fa-bell"></i> AlarmConfig <i
 					class="fa fa-fw fa-caret-down"></i></a>
 				<ul id="demo1" class="collapse">
-					<li id="navbar_modify"><a href="/AnotherKafkaMonitor/alarm/modify"><i
+					<li id="navbar_modify"><a href="/AnotherKafkaMonitor/alarm/email_list"><i
 							class="fa fa-edit fa-fw"></i> Email List</a></li>
-					<li id="navbar_add"><a href="/AnotherKafkaMonitor/alarm/add"><i
+					<li id="navbar_add"><a href="/AnotherKafkaMonitor/alarm/email_add"><i
 							class="fa fa-info-circle fa-fw"></i> Add Email</a></li>
+					<li id="navbar_modify"><a href="/AnotherKafkaMonitor/alarm/sms_list"><i
+							class="fa fa-edit fa-fw"></i> SMS List</a></li>
+					<li id="navbar_add"><a href="/AnotherKafkaMonitor/alarm/sms_add"><i
+							class="fa fa-info-circle fa-fw"></i> Add SMS</a></li>
 				</ul>
 			</li>
 			

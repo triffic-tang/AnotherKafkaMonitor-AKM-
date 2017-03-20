@@ -31,7 +31,7 @@ public class DBZKDataUtils
 //  private static final String TAB_OFFSETS = "offsets";
 //  private static final String TAB_ALARM = "alarm";
 
-  public static String getAlarm()
+  public static String getAlarm(String type)
   {
     Iterator<?> localIterator1;
     String group;
@@ -39,7 +39,7 @@ public class DBZKDataUtils
     if (zkc == null) {
       zkc = zkPool.getZkClient();
     }
-    String path = ANOTHERKAFKAMONITOR_PATH+"/alarm";
+    String path = ANOTHERKAFKAMONITOR_PATH + "/alarm" + type;
     if (ZkUtils.pathExists(zkc, path)) {
       Seq<?> seq = ZkUtils.getChildren(zkc, path);
       List<?> listSeq = JavaConversions.seqAsJavaList(seq);
@@ -162,7 +162,7 @@ public class DBZKDataUtils
     object.put("lag", Long.valueOf(alarm.getLag()));
     object.put("owner", alarm.getOwners());
     try {
-      update(object.toJSONString(), "alarm/" + alarm.getGroup() + "/" + alarm.getTopics());
+      update(object.toJSONString(), "alarm/" + alarm.getType() + "/" + alarm.getGroup() + "/" + alarm.getTopics());
     } catch (Exception ex) {
       LOG.error("[ZK.insertAlarm] has error,msg is " + ex.getMessage());
       return -1;

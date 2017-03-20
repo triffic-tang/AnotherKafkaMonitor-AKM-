@@ -56,8 +56,8 @@ public class AlarmService {
 		return map;
 	}
 
-	public static String list() {
-		return DBZKDataUtils.getAlarm();
+	public static String list(String type) {
+		return DBZKDataUtils.getAlarm(type);
 	}
 
 	public static void delete(String group, String topic) {

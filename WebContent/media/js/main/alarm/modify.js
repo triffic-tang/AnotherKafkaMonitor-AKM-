@@ -1,11 +1,13 @@
 $(document).ready(function() {
+	// notice type
+	var sendType = $('#addType').val();
 	$("#result").dataTable({
 		"bSort" : false,
 		"bLengthChange" : false,
 		"bProcessing" : true,
 		"bServerSide" : true,
 		"fnServerData" : retrieveData,
-		"sAjaxSource" : "/AnotherKafkaMonitor/alarm/list/table/ajax",
+		"sAjaxSource" : "/AnotherKafkaMonitor/alarm/list/table/ajax/"+sendType,
 		"aoColumns" : [ {
 			"mData" : 'group'
 		}, {
@@ -33,7 +35,7 @@ $(document).ready(function() {
 				aoData : JSON.stringify(aoData)
 			},
 			"success" : function(data) {
-				fnCallback(data)
+				fnCallback(data);
 			}
 		});
 	}
@@ -42,8 +44,10 @@ $(document).ready(function() {
 		var href = $(this).attr("href");
 		var group = href.split("#")[1].split("/")[0];
 		var topic = href.split("#")[1].split("/")[1];
+		//notice type
+		var type = $('#addType').val();
 		$("#remove_div").html("");
-		$("#remove_div").append("<a href='/AnotherKafkaMonitor/alarm/" + group + "/" + topic + "/del' class='btn btn-danger'>Remove</a>");
+		$("#remove_div").append("<a href='/AnotherKafkaMonitor/alarm/" + type + "/" + group + "/" + topic + "/del' class='btn btn-danger'>Remove</a>");
 		$('#doc_info').modal({
 			backdrop : 'static',
 			keyboard : false
