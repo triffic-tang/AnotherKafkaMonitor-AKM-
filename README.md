@@ -1,6 +1,12 @@
 AnotherKafkaMonitor
 ===========
 
+## ENV
+* scala-2.10.*
+* kafka-0.10.*
+* zookeeper-3.4.6
+
+
 ![Build Status](/WebContent/media/readmepic/build-passing.png)
 -------
 ## Table Of Contents
