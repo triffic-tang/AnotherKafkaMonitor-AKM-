@@ -6,6 +6,14 @@ AnotherKafkaMonitor
 * kafka-0.10.*
 * zookeeper-3.4.6
 
+## RELEASE INFO
+* [AnotherKafkaMonitor-v1.1.0.war](https://github.com/triffic-tang/AnotherKafkaMonitor-AKM-/blob/master/AnotherKafkaMonitor-v1.1.0.war)
+	- Fix some bugs mentioned in the issues.
+* [AnotherKafkaMonitor-v1.2.0.war](https://github.com/triffic-tang/AnotherKafkaMonitor-AKM-/blob/master/AnotherKafkaMonitor-v1.2.0.war)
+	- Add SMS Module. Some confiuration steps should be taken before use:
+		- Confiure username and password of [webchinese](http://sms.webchinese.cn/reg.shtml) in `system-config.properties`, if you don't have, please register first.
+		- 
+
 
 ![Build Status](/WebContent/media/readmepic/build-passing.png)
 -------
