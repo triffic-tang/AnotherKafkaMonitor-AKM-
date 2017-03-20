@@ -1,5 +1,7 @@
 AnotherKafkaMonitor
 ===========
+## STATUS
+![Build Status](/WebContent/media/readmepic/build-passing.png)
 
 ## ENV
 * scala-2.10.*
@@ -14,8 +16,6 @@ AnotherKafkaMonitor
 		- Confiure username and password of [webchinese](http://sms.webchinese.cn/reg.shtml) in `system-config.properties`, if you don't have, please register first.
 		- ![AnotherKafkaMonitor-v1.2.0](/WebContent/media/readmepic/anotherkafkamonitor-v1.2.0.png)
 
-
-![Build Status](/WebContent/media/readmepic/build-passing.png)
 -------
 ## Table Of Contents
 * [Inspiration](https://github.com/triffic-tang/AnotherKafkaMonitor#inspiration)
