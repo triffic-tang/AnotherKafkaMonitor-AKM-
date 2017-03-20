@@ -103,7 +103,7 @@ We are going to list the difference between [KafkaOffsetMonitor](https://github.
 
 ## Future Plan
 We are going to make some big step in the future, like below(JUST FOR NOW):
-* Add `SMS` notice module;
+* Add `SMS` notice module[DONE];
 * Support more shell command in the future
 * ...
 
