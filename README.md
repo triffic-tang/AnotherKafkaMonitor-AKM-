@@ -8,11 +8,11 @@ AnotherKafkaMonitor
 
 ## RELEASE INFO
 * [AnotherKafkaMonitor-v1.1.0.war](https://github.com/triffic-tang/AnotherKafkaMonitor-AKM-/blob/master/AnotherKafkaMonitor-v1.1.0.war)
-	- Fix some bugs mentioned in the issues.
+	- Fix some bugs mentioned in the [issues](https://github.com/triffic-tang/AnotherKafkaMonitor-AKM-/issues).
 * [AnotherKafkaMonitor-v1.2.0.war](https://github.com/triffic-tang/AnotherKafkaMonitor-AKM-/blob/master/AnotherKafkaMonitor-v1.2.0.war)
-	- Add SMS Module. Some confiuration steps should be taken before use:
+	- Add SMS Module. Confiuration steps should be taken before use:
 		- Confiure username and password of [webchinese](http://sms.webchinese.cn/reg.shtml) in `system-config.properties`, if you don't have, please register first.
-		- 
+		- ![AnotherKafkaMonitor-v1.2.0](/WebContent/media/readmepic/anotherkafkamonitor-v1.2.0.png)
 
 
 ![Build Status](/WebContent/media/readmepic/build-passing.png)
