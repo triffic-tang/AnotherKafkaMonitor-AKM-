@@ -52,13 +52,13 @@
 			-->	
 			
 			<li><a href="#" data-toggle="collapse" data-target="#demo1"><i
-					class="fa fa-fw fa-bell"></i> Alarm <i
+					class="fa fa-fw fa-bell"></i> AlarmConfig <i
 					class="fa fa-fw fa-caret-down"></i></a>
 				<ul id="demo1" class="collapse">
 					<li id="navbar_modify"><a href="/AnotherKafkaMonitor/alarm/modify"><i
-							class="fa fa-edit fa-fw"></i> Alarm List</a></li>
+							class="fa fa-edit fa-fw"></i> Email List</a></li>
 					<li id="navbar_add"><a href="/AnotherKafkaMonitor/alarm/add"><i
-							class="fa fa-info-circle fa-fw"></i> Add</a></li>
+							class="fa fa-info-circle fa-fw"></i> Add Email</a></li>
 				</ul>
 			</li>
 			
