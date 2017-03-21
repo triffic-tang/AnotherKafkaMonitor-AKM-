@@ -15,6 +15,9 @@ AnotherKafkaMonitor
 	- Add SMS Module. Confiuration steps should be taken before use:
 		- Confiure username and password of [webchinese](http://sms.webchinese.cn/reg.shtml) in `system-config.properties`, if you don't have, please register first.
 		- ![AnotherKafkaMonitor-v1.2.0](/WebContent/media/readmepic/anotherkafkamonitor-v1.2.0.png)
+* [AnotherKafkaMonitor-v1.2.1.war](https://github.com/triffic-tang/AnotherKafkaMonitor-AKM-/blob/master/AnotherKafkaMonitor-v1.2.1.war)
+	- Fix some bugs;
+	- Stable Version[**Highly Recommended**].
 
 -------
 ## Table Of Contents
