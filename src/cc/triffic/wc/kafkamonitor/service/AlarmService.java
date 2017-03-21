@@ -60,7 +60,7 @@ public class AlarmService {
 		return DBZKDataUtils.getAlarm(type);
 	}
 
-	public static void delete(String group, String topic) {
-		DBZKDataUtils.delete(group, topic, "alarm");
+	public static void delete(String type, String group, String topic) {
+		DBZKDataUtils.delete(type, group, topic, "alarm");
 	}
 }

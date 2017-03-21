@@ -20,6 +20,7 @@
 
 <body>
 	<jsp:include page="../public/navbar.jsp"></jsp:include>
+	<input id="addType" name="addType" type="hidden" value="email"/>
 	<div id="wrapper">
 		<div id="page-wrapper">
 			<div class="row">

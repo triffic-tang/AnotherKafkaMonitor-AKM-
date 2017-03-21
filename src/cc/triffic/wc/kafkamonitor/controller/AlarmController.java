@@ -248,10 +248,14 @@ public class AlarmController
 		}
 	}
 
-	@RequestMapping(value = { "/alarm/{group}/{topic}/del" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public ModelAndView alarmDelete(@PathVariable("group") String group,
+	@RequestMapping(value = { "/alarm/{type}/{group}/{topic}/del" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
+	public ModelAndView alarmDelete(@PathVariable("type") String type, @PathVariable("group") String group,
 			@PathVariable("topic") String topic) {
-		AlarmService.delete(group, topic);
-		return new ModelAndView("redirect:/alarm/modify");
+		String backRenderPage = "email_list";
+		if("sms".equalsIgnoreCase(type)) {
+			backRenderPage = "sms_list";
+		}
+		AlarmService.delete(type, group, topic);
+		return new ModelAndView("redirect:/alarm/" + backRenderPage);
 	}
 }

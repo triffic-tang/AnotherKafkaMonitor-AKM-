@@ -29,7 +29,7 @@
 						<button type="button" class="close" data-dismiss="alert"
 							aria-hidden="true">×</button>
 						<i class="fa fa-info-circle"></i> <strong>${Alarm_Submit_Status}</strong>
-						<a class="btn btn-large btn-primary" href="/AnotherKafkaMonitor/alarm/add">
+						<a class="btn btn-large btn-primary" href="/AnotherKafkaMonitor/alarm/${view_detail_page}_add">
 							<span class="ui-button-text">Create Again</span>
 						</a>
 					</div>

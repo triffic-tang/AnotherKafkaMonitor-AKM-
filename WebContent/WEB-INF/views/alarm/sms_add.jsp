@@ -87,7 +87,7 @@
 											value="">
 											<label for="inputError"
 											class="control-label text-danger"><i
-											class="fa fa-info-circle"></i> The Mobile which receives alarm message，like '13545862153'. </label>
+											class="fa fa-info-circle"></i> The Mobile which receives alarm message，Such as '13545862153'. </label>
 										</div>
 										<button type="button" class="btn btn-success" onclick="contextFormValid();">Add</button>
 										<div id="alert_mssage" style="display: none"
