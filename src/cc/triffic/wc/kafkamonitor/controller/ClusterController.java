@@ -15,8 +15,14 @@ import org.springframework.web.servlet.ModelAndView;
 import cc.triffic.wc.kafkamonitor.service.ClusterService;
 import cc.triffic.wc.kafkamonitor.utils.GzipUtils;
 
+/**
+ * Zookeeper Cluster Controller
+ * @author triffic-tang
+ *
+ */
 @Controller
 public class ClusterController {
+	
 	private static final Logger LOG = LoggerFactory.getLogger(ClusterController.class);
 
 	@RequestMapping(value = { "/cluster/info" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
@@ -34,8 +40,7 @@ public class ClusterController {
 	}
 
 	@RequestMapping(value = { "/cluster/info/ajax" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public void clusterAjax(HttpServletResponse response,
-			HttpServletRequest request) {
+	public void clusterAjax(HttpServletResponse response, HttpServletRequest request) {
 		response.setContentType("text/html;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		response.setHeader("Charset", "utf-8");
@@ -43,8 +48,7 @@ public class ClusterController {
 		response.setHeader("Content-Encoding", "gzip");
 
 		String ip = request.getHeader("x-forwarded-for");
-		LOG.info(new StringBuilder().append("IP:")
-				.append((ip == null) ? request.getRemoteAddr() : ip).toString());
+		LOG.info(new StringBuilder().append("IP:").append((ip == null) ? request.getRemoteAddr() : ip).toString());
 		try {
 			byte[] output = GzipUtils.compressToByte(ClusterService.getCluster());
 			response.setContentLength((output == null) ? "NULL".toCharArray().length : output.length);
@@ -54,13 +58,12 @@ public class ClusterController {
 			out.flush();
 			out.close();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			LOG.error("---Error Occurs:---", ex);
 		}
 	}
 
 	@RequestMapping(value = { "/cluster/zk/islive/ajax" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public void zkCliLiveAjax(HttpServletResponse response,
-			HttpServletRequest request) {
+	public void zkCliLiveAjax(HttpServletResponse response, HttpServletRequest request) {
 		response.setContentType("text/html;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		response.setHeader("Charset", "utf-8");
@@ -75,7 +78,7 @@ public class ClusterController {
 			out.flush();
 			out.close();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			LOG.error("---Error Occurs:---", ex);
 		}
 	}
 
@@ -91,16 +94,14 @@ public class ClusterController {
 		String type = request.getParameter("type");
 		try {
 			byte[] output = GzipUtils.compressToByte(ClusterService.getZKMenu(cmd, type));
-
-			response.setContentLength((output == null) ? "NULL".toCharArray().length
-					: output.length);
+			response.setContentLength((output == null) ? "NULL".toCharArray().length : output.length);
 			OutputStream out = response.getOutputStream();
 			out.write(output);
 
 			out.flush();
 			out.close();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			LOG.error("---Error Occurs:---", ex);
 		}
 	}
 }
