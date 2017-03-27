@@ -5,6 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * Error Controller class
+ * @author lajor
+ *
+ */
 @Controller
 @RequestMapping({ "/errors" })
 public class ErrorPageController {
