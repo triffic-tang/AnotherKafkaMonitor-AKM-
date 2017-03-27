@@ -24,6 +24,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+/**
+ * Alarm Controller
+ * @author triffic-tang
+ *
+ */
 @Controller
 public class AlarmController
 {	
@@ -90,7 +95,7 @@ public class AlarmController
 			out.flush();
 			out.close();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			LOG.error("---Error Occurs:---", ex);
 		}
 	}
 
@@ -112,13 +117,13 @@ public class AlarmController
 		JSONArray topics = JSON.parseArray(ke_topic_alarms);
 		JSONArray groups = JSON.parseArray(ke_group_alarms);
 		AlarmDomain alarm = new AlarmDomain();
-		for (Iterator<?> localIterator1 = groups.iterator(); localIterator1.hasNext();) {
-			object = localIterator1.next();
+		for (Iterator<?> groupIterator = groups.iterator(); groupIterator.hasNext();) {
+			object = groupIterator.next();
 			obj = (JSONObject) object;
 			alarm.setGroup(obj.getString("name"));
 		}
-		for (Iterator<?> localIterator2 = topics.iterator(); localIterator2.hasNext();) {
-			object = localIterator2.next();
+		for (Iterator<?> topicsIterator = topics.iterator(); topicsIterator.hasNext();) {
+			object = topicsIterator.next();
 			obj = (JSONObject) object;
 			alarm.setTopics(obj.getString("name"));
 		}
@@ -127,7 +132,7 @@ public class AlarmController
 		} catch (Exception ex) {
 			LOG.error(new StringBuilder()
 					.append("Parse long has error,msg is ")
-					.append(ex.getMessage()).toString());
+					.append(ex.getMessage()).toString(), ex);
 		}
 		alarm.setModifyDate(CalendarUtils.getNormalDate());
 		alarm.setOwners(sendObject);
@@ -135,18 +140,14 @@ public class AlarmController
 
 		Map<String, Object> map = AlarmService.addAlarm(alarm);
 		if ("success".equals(map.get("status"))) {
-			session.removeAttribute("Alarm_Submit_Status");
-			session.setAttribute("Alarm_Submit_Status", map.get("info"));
-			session.removeAttribute("view_detail_page");
-			session.setAttribute("view_detail_page", addType);
 			mav.setViewName("redirect:/alarm/create/success");
 		} else {
-			session.removeAttribute("Alarm_Submit_Status");
-			session.setAttribute("Alarm_Submit_Status", map.get("info"));
-			session.removeAttribute("view_detail_page");
-			session.setAttribute("view_detail_page", addType);
 			mav.setViewName("redirect:/alarm/create/failed");
 		}
+		session.removeAttribute("Alarm_Submit_Status");
+		session.setAttribute("Alarm_Submit_Status", map.get("info"));
+		session.removeAttribute("view_detail_page");
+		session.setAttribute("view_detail_page", addType);
 		return mav;
 	}
 
@@ -167,17 +168,16 @@ public class AlarmController
 		int iDisplayStart = 0;
 		int iDisplayLength = 0;
 		String search = "";
-		for (Iterator<?> localIterator1 = jsonArray.iterator(); localIterator1
-				.hasNext();) {
-			Object obj = localIterator1.next();
+		for (Iterator<?> topicsIterator = jsonArray.iterator(); topicsIterator.hasNext();) {
+			Object obj = topicsIterator.next();
 			JSONObject jsonObj = (JSONObject) obj;
-			if ("sEcho".equals(jsonObj.getString("name")))
+			if ("sEcho".equals(jsonObj.getString("name"))) {
 				sEcho = jsonObj.getIntValue("value");
-			else if ("iDisplayStart".equals(jsonObj.getString("name")))
+			} else if ("iDisplayStart".equals(jsonObj.getString("name"))) {
 				iDisplayStart = jsonObj.getIntValue("value");
-			else if ("iDisplayLength".equals(jsonObj.getString("name")))
+			} else if ("iDisplayLength".equals(jsonObj.getString("name"))) {
 				iDisplayLength = jsonObj.getIntValue("value");
-			else if ("sSearch".equals(jsonObj.getString("name"))) {
+			} else if ("sSearch".equals(jsonObj.getString("name"))) {
 				search = jsonObj.getString("value");
 			}
 		}
@@ -185,9 +185,9 @@ public class AlarmController
 		JSONArray ret = JSON.parseArray(AlarmService.list(type));
 		int offset = 0;
 		JSONArray retArr = new JSONArray();
-		for (Iterator<?> localIterator2 = ret.iterator(); localIterator2.hasNext();) {
+		for (Iterator<?> listIterator = ret.iterator(); listIterator.hasNext();) {
 			JSONObject obj;
-			Object tmp = localIterator2.next();
+			Object tmp = listIterator.next();
 			JSONObject tmp2 = (JSONObject) tmp;
 			if ((search.length() > 0) && (search.equals(tmp2.getString("topic")))) {
 				obj = new JSONObject();
@@ -197,8 +197,7 @@ public class AlarmController
 				obj.put("owner", tmp2.getString("owner"));
 				obj.put("created", tmp2.getString("created"));
 				obj.put("modify", tmp2.getString("modify"));
-				obj.put("operate",
-						new StringBuilder()
+				obj.put("operate", new StringBuilder()
 								.append("<a name='remove' href='#")
 								.append(tmp2.getString("group"))
 								.append("/")
@@ -207,8 +206,7 @@ public class AlarmController
 								.toString());
 				retArr.add(obj);
 			} else if (search.length() == 0) {
-				if ((offset < iDisplayLength + iDisplayStart)
-						&& (offset >= iDisplayStart)) {
+				if ((offset < iDisplayLength + iDisplayStart) && (offset >= iDisplayStart)) {
 					obj = new JSONObject();
 					obj.put("group", tmp2.getString("group"));
 					obj.put("topic", tmp2.getString("topic"));
@@ -216,8 +214,7 @@ public class AlarmController
 					obj.put("owner", tmp2.getString("owner"));
 					obj.put("created", tmp2.getString("created"));
 					obj.put("modify", tmp2.getString("modify"));
-					obj.put("operate",
-							new StringBuilder()
+					obj.put("operate", new StringBuilder()
 									.append("<a name='remove' href='#")
 									.append(tmp2.getString("group"))
 									.append("/")
@@ -244,13 +241,12 @@ public class AlarmController
 			out.flush();
 			out.close();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			LOG.error("---Error Occurs:---", ex);
 		}
 	}
 
 	@RequestMapping(value = { "/alarm/{type}/{group}/{topic}/del" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public ModelAndView alarmDelete(@PathVariable("type") String type, @PathVariable("group") String group,
-			@PathVariable("topic") String topic) {
+	public ModelAndView alarmDelete(@PathVariable("type") String type, @PathVariable("group") String group, @PathVariable("topic") String topic) {
 		String backRenderPage = "email_list";
 		if("sms".equalsIgnoreCase(type)) {
 			backRenderPage = "sms_list";
