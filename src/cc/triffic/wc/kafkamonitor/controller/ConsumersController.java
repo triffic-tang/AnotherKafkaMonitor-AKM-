@@ -21,6 +21,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+/**
+ * Kafka Consumer Controller class
+ * @author lajor
+ *
+ */
 @Controller
 public class ConsumersController {
 	private static final Logger LOG = LoggerFactory.getLogger(ConsumersController.class);
@@ -55,11 +60,9 @@ public class ConsumersController {
 		response.setHeader("Content-Encoding", "gzip");
 
 		String ip = request.getHeader("x-forwarded-for");
-		LOG.info(new StringBuilder().append("IP:")
-				.append((ip == null) ? request.getRemoteAddr() : ip).toString());
+		LOG.info(new StringBuilder().append("IP:").append((ip == null) ? request.getRemoteAddr() : ip).toString());
 		try {
-			byte[] output = GzipUtils.compressToByte(ConsumerService
-					.getActiveTopic());
+			byte[] output = GzipUtils.compressToByte(ConsumerService.getActiveTopic());
 			response.setContentLength(output.length);
 			OutputStream out = response.getOutputStream();
 			out.write(output);
@@ -67,13 +70,12 @@ public class ConsumersController {
 			out.flush();
 			out.close();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			LOG.error("---Error Occurs:---", ex);
 		}
 	}
 
 	@RequestMapping(value = { "/consumer/list/table/ajax" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public void consumerListAjax(HttpServletResponse response,
-			HttpServletRequest request) {
+	public void consumerListAjax(HttpServletResponse response, HttpServletRequest request) {
 		response.setContentType("text/html;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		response.setHeader("Charset", "utf-8");
@@ -81,22 +83,21 @@ public class ConsumersController {
 		response.setHeader("Content-Encoding", "gzip");
 
 		String ip = request.getHeader("x-forwarded-for");
-		LOG.info(new StringBuilder().append("IP:")
-				.append((ip == null) ? request.getRemoteAddr() : ip).toString());
+		LOG.info(new StringBuilder().append("IP:").append((ip == null) ? request.getRemoteAddr() : ip).toString());
 
 		String aoData = request.getParameter("aoData");
 		JSONArray jsonArray = JSON.parseArray(aoData);
 		int sEcho = 0;
 		int iDisplayStart = 0;
 		int iDisplayLength = 0;
-		for (Iterator<?> localIterator1 = jsonArray.iterator(); localIterator1.hasNext();) {
-			Object obj = localIterator1.next();
+		for (Iterator<?> consumerIterator = jsonArray.iterator(); consumerIterator.hasNext();) {
+			Object obj = consumerIterator.next();
 			JSONObject jsonObj = (JSONObject) obj;
-			if ("sEcho".equals(jsonObj.getString("name")))
+			if ("sEcho".equals(jsonObj.getString("name"))) {
 				sEcho = jsonObj.getIntValue("value");
-			else if ("iDisplayStart".equals(jsonObj.getString("name")))
+			} else if ("iDisplayStart".equals(jsonObj.getString("name"))) {
 				iDisplayStart = jsonObj.getIntValue("value");
-			else if ("iDisplayLength".equals(jsonObj.getString("name"))) {
+			} else if ("iDisplayLength".equals(jsonObj.getString("name"))) {
 				iDisplayLength = jsonObj.getIntValue("value");
 			}
 		}
@@ -104,20 +105,18 @@ public class ConsumersController {
 		JSONArray ret = JSON.parseArray(ConsumerService.getConsumer());
 		int offset = 0;
 		JSONArray retArr = new JSONArray();
-		for (Iterator<?> localIterator2 = ret.iterator(); localIterator2.hasNext();) {
-			Object tmp = localIterator2.next();
+		for (Iterator<?> consumerIterator = ret.iterator(); consumerIterator.hasNext();) {
+			Object tmp = consumerIterator.next();
 			JSONObject tmp2 = (JSONObject) tmp;
-			if ((offset < iDisplayLength + iDisplayStart)
-					&& (offset >= iDisplayStart)) {
+			if ((offset < iDisplayLength + iDisplayStart) && (offset >= iDisplayStart)) {
 				JSONObject obj = new JSONObject();
 				obj.put("id", tmp2.getInteger("id"));
 				obj.put("group", new StringBuilder().append("<a class='link' href='#")
 								.append(tmp2.getString("group")).append("'>")
-								.append(tmp2.getString("group")).append("</a>")
-								.toString());
+								.append(tmp2.getString("group")).append("</a>").toString());
 				obj.put("topic", (tmp2.getString("topic").length() > 50) ? new StringBuilder()
 								.append(tmp2.getString("topic")
-										.substring(0, 50)).append("...")
+								.substring(0, 50)).append("...")
 								.toString() : tmp2.getString("topic"));
 				obj.put("consumerNumber", tmp2.getInteger("consumerNumber"));
 				retArr.add(obj);
@@ -139,13 +138,12 @@ public class ConsumersController {
 			out.flush();
 			out.close();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			LOG.error("---Error Occurs:---", ex);
 		}
 	}
 
 	@RequestMapping(value = { "/consumer/{group}/table/ajax" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public void consumerDetailListAjax(@PathVariable("group") String group,
-			HttpServletResponse response, HttpServletRequest request) {
+	public void consumerDetailListAjax(@PathVariable("group") String group, HttpServletResponse response, HttpServletRequest request) {
 		response.setContentType("text/html;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		response.setHeader("Charset", "utf-8");
@@ -153,22 +151,21 @@ public class ConsumersController {
 		response.setHeader("Content-Encoding", "gzip");
 
 		String ip = request.getHeader("x-forwarded-for");
-		LOG.info(new StringBuilder().append("IP:")
-				.append((ip == null) ? request.getRemoteAddr() : ip).toString());
+		LOG.info(new StringBuilder().append("IP:").append((ip == null) ? request.getRemoteAddr() : ip).toString());
 
 		String aoData = request.getParameter("aoData");
 		JSONArray jsonArray = JSON.parseArray(aoData);
 		int sEcho = 0;
 		int iDisplayStart = 0;
 		int iDisplayLength = 0;
-		for (Iterator<?> localIterator1 = jsonArray.iterator(); localIterator1.hasNext();) {
-			Object obj = localIterator1.next();
+		for (Iterator<?> consumerIterator = jsonArray.iterator(); consumerIterator.hasNext();) {
+			Object obj = consumerIterator.next();
 			JSONObject jsonObj = (JSONObject) obj;
-			if ("sEcho".equals(jsonObj.getString("name")))
+			if ("sEcho".equals(jsonObj.getString("name"))) {
 				sEcho = jsonObj.getIntValue("value");
-			else if ("iDisplayStart".equals(jsonObj.getString("name")))
+			} else if ("iDisplayStart".equals(jsonObj.getString("name"))) {
 				iDisplayStart = jsonObj.getIntValue("value");
-			else if ("iDisplayLength".equals(jsonObj.getString("name"))) {
+			} else if ("iDisplayLength".equals(jsonObj.getString("name"))) {
 				iDisplayLength = jsonObj.getIntValue("value");
 			}
 		}
@@ -176,33 +173,29 @@ public class ConsumersController {
 		JSONArray ret = JSON.parseArray(ConsumerService.getConsumerDetail(group, ip));
 		int offset = 0;
 		JSONArray retArr = new JSONArray();
-		for (Iterator<?> localIterator2 = ret.iterator(); localIterator2.hasNext();) {
-			Object tmp = localIterator2.next();
+		for (Iterator<?> consumerIterator = ret.iterator(); consumerIterator.hasNext();) {
+			Object tmp = consumerIterator.next();
 			JSONObject tmp2 = (JSONObject) tmp;
-			if ((offset < iDisplayLength + iDisplayStart)
-					&& (offset >= iDisplayStart)) {
+			if ((offset < iDisplayLength + iDisplayStart) && (offset >= iDisplayStart)) {
 				JSONObject obj = new JSONObject();
 				String topic = tmp2.getString("topic");
 				obj.put("id", tmp2.getInteger("id"));
 				obj.put("topic", topic);
-				if (tmp2.getBoolean("isConsumering").booleanValue())
+				if (tmp2.getBoolean("isConsumering").booleanValue()) {
+					obj.put("isConsumering", new StringBuilder()
+									.append("<a href='/AnotherKafkaMonitor/consumers/offset/")
+									.append(group)
+									.append("/")
+									.append(topic)
+									.append("/' target='_blank' class='btn btn-success btn-xs'>Running</a>").toString());
+				} else {
 					obj.put("isConsumering",
 							new StringBuilder()
 									.append("<a href='/AnotherKafkaMonitor/consumers/offset/")
 									.append(group)
 									.append("/")
 									.append(topic)
-									.append("/' target='_blank' class='btn btn-success btn-xs'>Running</a>")
-									.toString());
-				else {
-					obj.put("isConsumering",
-							new StringBuilder()
-									.append("<a href='/AnotherKafkaMonitor/consumers/offset/")
-									.append(group)
-									.append("/")
-									.append(topic)
-									.append("/' target='_blank' class='btn btn-danger btn-xs'>Pending</a>")
-									.toString());
+									.append("/' target='_blank' class='btn btn-danger btn-xs'>Pending</a>").toString());
 				}
 				retArr.add(obj);
 			}
@@ -223,7 +216,7 @@ public class ConsumersController {
 			out.flush();
 			out.close();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			LOG.error("---Error Occurs:---", ex);
 		}
 	}
 }
