@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Error Controller class
- * @author lajor
+ * @author triffic-tang
  *
  */
 @Controller
