@@ -42,7 +42,7 @@ Also you can take a quick look before take action(**SOME ADDITIONAL INFO**), ***
 ------
 
 ## Inspiration
-AnotherKafkaMonitor is an app which used to monitor kafka producer and consumer progress inspried by [KafkaOffsetMonitor](https://github.com/quantifind/KafkaOffsetMonitor). It aims to help you figure out what's going on in your kafka cluster, that's to say, to understand how fast the producer send message to the kafka or whether the consumer is far behind the producer or not, if lag exceeds threshold, you will be noticed through alarm email.
+AnotherKafkaMonitor is an app which used to monitor kafka producer and consumer progress inspried by [KafkaOffsetMonitor](https://github.com/quantifind/KafkaOffsetMonitor). It aims to help you figure out what's going on in your kafka cluster, that's to say, to understand how fast the producer send message to the kafka or whether the consumer is far behind the producer or not, if lag exceeds threshold, you will be noticed through alarm email or sms.
 
 ## Kafka DataStructure In Zookeeper
 The Implementation Of AnotherKafkaMonitor Relys On the Datastructure of Kafka In Zookeeper
