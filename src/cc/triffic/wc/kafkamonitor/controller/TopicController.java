@@ -23,6 +23,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+/**
+ * Topic controller class
+ * @author triffic-tang
+ *
+ */
 @Controller
 public class TopicController {
 	private static final Logger LOG = LoggerFactory.getLogger(TopicController.class);
@@ -42,19 +47,16 @@ public class TopicController {
 	}
 
 	@RequestMapping(value = { "/topic/meta/{tname}/" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public ModelAndView topicMetaView(@PathVariable("tname") String tname,
-			HttpServletRequest request) {
+	public ModelAndView topicMetaView(@PathVariable("tname") String tname, HttpServletRequest request) {
 		String ip = request.getHeader("x-forwarded-for");
-		LOG.info(new StringBuilder().append("IP:")
-				.append((ip == null) ? request.getRemoteAddr() : ip).toString());
+		LOG.info(new StringBuilder().append("IP:").append((ip == null) ? request.getRemoteAddr() : ip).toString());
 
 		ModelAndView mav = new ModelAndView();
-		if (TopicService.findTopicName(tname, ip))
+		if (TopicService.findTopicName(tname, ip)) {
 			mav.setViewName("/topic/topic_meta");
-		else {
+		} else {
 			mav.setViewName("/error/404");
 		}
-
 		return mav;
 	}
 
@@ -73,8 +75,7 @@ public class TopicController {
 	}
 
 	@RequestMapping(value = { "/topic/meta/{tname}/ajax" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public void topicMetaAjax(@PathVariable("tname") String tname,
-			HttpServletResponse response, HttpServletRequest request) {
+	public void topicMetaAjax(@PathVariable("tname") String tname, HttpServletResponse response, HttpServletRequest request) {
 		response.setContentType("text/html;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		response.setHeader("Charset", "utf-8");
@@ -82,23 +83,21 @@ public class TopicController {
 		response.setHeader("Content-Encoding", "gzip");
 
 		String ip = request.getHeader("x-forwarded-for");
-		LOG.info(new StringBuilder().append("IP:")
-				.append((ip == null) ? request.getRemoteAddr() : ip).toString());
+		LOG.info(new StringBuilder().append("IP:").append((ip == null) ? request.getRemoteAddr() : ip).toString());
 
 		String aoData = request.getParameter("aoData");
 		JSONArray jsonArray = JSON.parseArray(aoData);
 		int sEcho = 0;
 		int iDisplayStart = 0;
 		int iDisplayLength = 0;
-		for (Iterator<?> localIterator1 = jsonArray.iterator(); localIterator1
-				.hasNext();) {
-			Object obj = localIterator1.next();
+		for (Iterator<?> topicIterator = jsonArray.iterator(); topicIterator.hasNext();) {
+			Object obj = topicIterator.next();
 			JSONObject jsonObj = (JSONObject) obj;
-			if ("sEcho".equals(jsonObj.getString("name")))
+			if ("sEcho".equals(jsonObj.getString("name"))) {
 				sEcho = jsonObj.getIntValue("value");
-			else if ("iDisplayStart".equals(jsonObj.getString("name")))
+			} else if ("iDisplayStart".equals(jsonObj.getString("name"))) {
 				iDisplayStart = jsonObj.getIntValue("value");
-			else if ("iDisplayLength".equals(jsonObj.getString("name"))) {
+			} else if ("iDisplayLength".equals(jsonObj.getString("name"))) {
 				iDisplayLength = jsonObj.getIntValue("value");
 			}
 		}
@@ -107,11 +106,10 @@ public class TopicController {
 		JSONArray ret = JSON.parseArray(str);
 		int offset = 0;
 		JSONArray retArr = new JSONArray();
-		for (Iterator<?> localIterator2 = ret.iterator(); localIterator2.hasNext();) {
-			Object tmp = localIterator2.next();
+		for (Iterator<?> topicIterator = ret.iterator(); topicIterator.hasNext();) {
+			Object tmp = topicIterator.next();
 			JSONObject tmp2 = (JSONObject) tmp;
-			if ((offset < iDisplayLength + iDisplayStart)
-					&& (offset >= iDisplayStart)) {
+			if ((offset < iDisplayLength + iDisplayStart) && (offset >= iDisplayStart)) {
 				JSONObject obj = new JSONObject();
 				obj.put("topic", tname);
 				obj.put("partition", tmp2.getInteger("partitionId"));
@@ -130,21 +128,19 @@ public class TopicController {
 		obj.put("aaData", retArr);
 		try {
 			byte[] output = GzipUtils.compressToByte(obj.toJSONString());
-			response.setContentLength((output == null) ? "NULL".toCharArray().length
-					: output.length);
+			response.setContentLength((output == null) ? "NULL".toCharArray().length : output.length);
 			OutputStream out = response.getOutputStream();
 			out.write(output);
 
 			out.flush();
 			out.close();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			LOG.error("---Error Occurs:---", ex);
 		}
 	}
 
 	@RequestMapping(value = { "/topic/list/table/ajax" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public void topicListAjax(HttpServletResponse response,
-			HttpServletRequest request) {
+	public void topicListAjax(HttpServletResponse response, HttpServletRequest request) {
 		response.setContentType("text/html;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		response.setHeader("Charset", "utf-8");
@@ -152,8 +148,7 @@ public class TopicController {
 		response.setHeader("Content-Encoding", "gzip");
 
 		String ip = request.getHeader("x-forwarded-for");
-		LOG.info(new StringBuilder().append("IP:")
-				.append((ip == null) ? request.getRemoteAddr() : ip).toString());
+		LOG.info(new StringBuilder().append("IP:").append((ip == null) ? request.getRemoteAddr() : ip).toString());
 
 		String aoData = request.getParameter("aoData");
 		JSONArray jsonArray = JSON.parseArray(aoData);
@@ -161,17 +156,16 @@ public class TopicController {
 		int iDisplayStart = 0;
 		int iDisplayLength = 0;
 		String search = "";
-		for (Iterator<?> localIterator1 = jsonArray.iterator(); localIterator1
-				.hasNext();) {
-			Object obj = localIterator1.next();
+		for (Iterator<?> topicIterator = jsonArray.iterator(); topicIterator.hasNext();) {
+			Object obj = topicIterator.next();
 			JSONObject jsonObj = (JSONObject) obj;
-			if ("sEcho".equals(jsonObj.getString("name")))
+			if ("sEcho".equals(jsonObj.getString("name"))) {
 				sEcho = jsonObj.getIntValue("value");
-			else if ("iDisplayStart".equals(jsonObj.getString("name")))
+			} else if ("iDisplayStart".equals(jsonObj.getString("name"))) {
 				iDisplayStart = jsonObj.getIntValue("value");
-			else if ("iDisplayLength".equals(jsonObj.getString("name")))
+			} else if ("iDisplayLength".equals(jsonObj.getString("name"))) {
 				iDisplayLength = jsonObj.getIntValue("value");
-			else if ("sSearch".equals(jsonObj.getString("name"))) {
+			} else if ("sSearch".equals(jsonObj.getString("name"))) {
 				search = jsonObj.getString("value");
 			}
 		}
